@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';
 import JSConfetti from "js-confetti";
+import Cookies from 'js-cookie';
 import '../../styles/login.css';  // 스타일 파일을 import
 
 const LoginForm = () => {
@@ -40,7 +41,12 @@ const LoginForm = () => {
 
             if (response.ok) {
                 const data = await response.json();
+
+                // 서버로부터 받은 토큰을 쿠키에 저장
+                Cookies.set('token', data.token, {expires : 1}); // 1일동안 유효
+
                 console.log('Login Successful:', data);
+                
                 setShowConfetti(true);
                 setTimeout(() => {
                     setShowConfetti(false);
