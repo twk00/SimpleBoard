@@ -7,7 +7,7 @@ import '../../styles/login.css';  // 스타일 파일을 import
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
-        id: '',
+        username: '',
         password: ''
     });
 
@@ -46,7 +46,7 @@ const LoginForm = () => {
                 Cookies.set('token', data.token, {expires : 1}); // 1일동안 유효
 
                 console.log('Login Successful:', data);
-                
+
                 setShowConfetti(true);
                 setTimeout(() => {
                     setShowConfetti(false);
@@ -76,8 +76,8 @@ const LoginForm = () => {
             {showConfetti && <Confetti />} {/* 폭죽 효과 컴포넌트 */}
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="id">ID:</label>
-                <input type="text" id="id" name="id" value={formData.id} onChange={handleChange} required />
+                <label htmlFor="username">ID:</label>
+                <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required />
                 
                 <label htmlFor="password">Password:</label>
                 <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />

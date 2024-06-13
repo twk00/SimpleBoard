@@ -8,8 +8,8 @@ const jsConfetti = new JSConfetti(); // JSConfetti 인스턴스를 컴포넌트 
 
 const SignupForm = () => {
     const [formData, setFormData] = useState({
+        nickname: '',
         username: '',
-        id: '',
         password: ''
     });
 
@@ -71,10 +71,10 @@ const SignupForm = () => {
             {showConfetti && <Confetti />} {/* 폭죽 효과 컴포넌트 */}
             <form onSubmit={handleSubmit}>
                 <label htmlFor="username">Username:</label>
-                <input type="text" name="username" id="username" value={formData.username} onChange={handleChange} required />
+                <input type="text" name="nickname" id="nickname" value={formData.nickname} onChange={handleChange} required />
 
                 <label htmlFor="id">Id:</label>
-                <input type="text" id="id" name="id" value={formData.id} onChange={handleChange} required />
+                <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required />
                 
                 <label htmlFor="password">Password:</label>
                 <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />

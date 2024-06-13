@@ -1,9 +1,10 @@
 import React from "react";
+import HomeForm from "./HomeForm";
 
 const HomePage = () => {
     return (
         <div className="page-container">
-            Hello!
+            <HomeForm />
         </div>
     )
 }
