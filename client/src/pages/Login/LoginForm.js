@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';
+import JSConfetti from "js-confetti";
 import '../../styles/login.css';  // 스타일 파일을 import
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
-        email: '',
+        id: '',
         password: ''
     });
 
@@ -21,9 +22,42 @@ const LoginForm = () => {
             [name]: value
         });
     };
+    
+    //HTML Canvas 요소를 생성하여 페이지에 추가
+    const jsConfetti = new JSConfetti(); 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        try {
+            const response = await fetch('http://localhost:3001/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Login Successful:', data);
+                setShowConfetti(true);
+                setTimeout(() => {
+                    setShowConfetti(false);
+                    navigate('/home');  // 로그인 성공 시 홈페이지로 이동
+                }, 3000);
+            } else {
+                const errorData = await response.json();
+                alert(`Login failed: ${errorData.s}`);
+                jsConfetti.addConfetti({
+                    emojis: ["❤️‍🩹", "🥹", "❌"],
+                    emojiSize: 100,
+                    confettiNumber: 30,
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
         console.log('Form submitted:', formData);
     };
 
@@ -31,23 +65,18 @@ const LoginForm = () => {
         navigate('/signup'); // 회원가입 페이지로 이동
     };
 
-    const handleConfettiClick = () => {
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 3000); // 3초 후에 폭죽 효과를 끔
-    };
-
     return (
         <div className="login-container">
             {showConfetti && <Confetti />} {/* 폭죽 효과 컴포넌트 */}
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email:</label>
-                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+                <label htmlFor="id">ID:</label>
+                <input type="id" id="id" name="id" value={formData.id} onChange={handleChange} required />
                 
                 <label htmlFor="password">Password:</label>
                 <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
                 
-                <button type="submit" onClick={handleConfettiClick}>Login</button>
+                <button type="submit" >Login</button>
             </form>
             <button onClick={handleSignupClick} className="signup-button">Sign Up</button> {/* 회원가입 버튼 추가 */}
         </div>
