@@ -3,6 +3,7 @@ package com.example.demo.board.dto;
 import com.example.demo.board.entity.Post;
 import com.example.demo.member.entity.Member;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
@@ -10,7 +11,7 @@ import lombok.Builder;
 @AllArgsConstructor
 public class CreatePostDto {
 
-	@Not
+	@NotBlank
 	private String title;
 	private String content;
 
