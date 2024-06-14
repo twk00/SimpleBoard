@@ -1,5 +1,7 @@
 package com.example.demo.auth;
 
+import static org.springframework.security.config.Customizer.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +12,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.example.demo.auth.jwt.JwtAuthenticationFilter;
 import com.example.demo.auth.jwt.JwtTokenProvider;
@@ -29,7 +34,7 @@ public class SecurityConfig {
 			// REST API이므로 basic auth 및 csrf 보안을 사용하지 않음
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.csrf(AbstractHttpConfigurer::disable)
-			.cors(AbstractHttpConfigurer::disable)
+			.cors(withDefaults())
 			// JWT를 사용하기 때문에 세션을 사용하지 않음
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			// 요청 권한 설정
@@ -48,6 +53,20 @@ public class SecurityConfig {
 
 		return http.build();
 	}
+
+
+	@Bean
+	public CorsFilter corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOriginPattern("*"); // 허용할 도메인 패턴, 모든 도메인을 허용하려면 "*"
+		config.addAllowedHeader("*"); // 모든 헤더를 허용
+		config.addAllowedMethod("*"); // 모든 HTTP 메서드를 허용
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
+	}
+
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
