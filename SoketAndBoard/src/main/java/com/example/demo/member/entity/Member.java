@@ -33,7 +33,6 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "member_id")
 	private Long id;
 
 	@Column(nullable = false)

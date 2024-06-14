@@ -47,6 +47,7 @@ public class MemberService {
 
 		String encodedPassword = passwordEncoder.encode(memberSignUpDto.getPassword());
 		List<String> roles = new ArrayList<>();
+		roles.add("USER");
 		return MemberDto.toDto(memberRepository.save(memberSignUpDto.toEntity(encodedPassword, roles)));
 	}
 
