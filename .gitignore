@@ -25,3 +25,5 @@ yarn-error.log*
 /SoketAndBoard/.gradle/
 /SoketAndBoard/.idle/
 
+/client/
+
