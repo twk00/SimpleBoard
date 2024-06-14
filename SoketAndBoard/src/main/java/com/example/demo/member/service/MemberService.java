@@ -14,6 +14,7 @@ import com.example.demo.auth.jwt.JwtToken;
 import com.example.demo.auth.jwt.JwtTokenProvider;
 import com.example.demo.member.dto.MemberDto;
 import com.example.demo.member.dto.MemberSignUpDto;
+import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,8 @@ public class MemberService {
 			new UsernamePasswordAuthenticationToken(username, password);
 		Authentication authentication = authenticationManagerBuilder.getObject()
 			.authenticate(authenticationToken);
-		return jwtTokenProvider.generateToken(authentication);
+		String nickname = getNicknameByUsername(username);
+		return jwtTokenProvider.generateToken(authentication, nickname);
 	}
 
 	@Transactional
@@ -49,6 +51,12 @@ public class MemberService {
 		List<String> roles = new ArrayList<>();
 		roles.add("USER");
 		return MemberDto.toDto(memberRepository.save(memberSignUpDto.toEntity(encodedPassword, roles)));
+	}
+
+	private String getNicknameByUsername(String username) {
+		Member member = memberRepository.findByUsername(username)
+			.orElseThrow(() -> new IllegalArgumentException("Username " + username + " not found."));
+		return member.getNickname();
 	}
 
 }

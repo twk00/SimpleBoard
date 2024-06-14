@@ -22,7 +22,7 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/signin")
-	public JwtToken signin(@RequestBody MemberSignInDto memberSignInDto) {
+	public JwtToken signIn(@RequestBody MemberSignInDto memberSignInDto) {
 		return memberService.signIn(memberSignInDto.getUsername(), memberSignInDto.getPassword());
 	}
 
