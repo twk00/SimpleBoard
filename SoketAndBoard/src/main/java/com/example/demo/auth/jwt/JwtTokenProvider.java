@@ -37,7 +37,7 @@ public class JwtTokenProvider {
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public JwtToken generateToken(Authentication authentication) {
+	public JwtToken generateToken(Authentication authentication, String nickname) {
 		String authorities = authentication.getAuthorities()
 			.stream()
 			.map(GrantedAuthority::getAuthority)
@@ -50,6 +50,7 @@ public class JwtTokenProvider {
 		String accessToken = Jwts.builder()
 			.setSubject(authentication.getName())
 			.claim("auth", authorities)
+			.claim("nickname", nickname)
 			.setExpiration(accessTokenExpire)
 			.signWith(key, SignatureAlgorithm.HS256)
 			.compact();
@@ -117,6 +118,11 @@ public class JwtTokenProvider {
 		} catch (ExpiredJwtException e) {
 			return e.getClaims();
 		}
+	}
+
+	public String getNicknameFromToken(String token) {
+		Claims claims = parseClaims(token);
+		return claims.get("nickname", String.class);
 	}
 
 
